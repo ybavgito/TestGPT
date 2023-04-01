@@ -45,7 +45,6 @@ export default async function handler(
   const chain = makeChain(vectorStore, (token: string) => {
     sendData(JSON.stringify({ data: token }));
   });
-
   try {
     //Ask a question
     const response = await chain.call({
