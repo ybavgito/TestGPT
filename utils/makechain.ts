@@ -13,11 +13,13 @@ Follow Up Input: {question}
 Standalone question:`);
 
 const QA_PROMPT = PromptTemplate.fromTemplate(
-  `Instructions: Compose a comprehensive reply to the query using the search results given. 
+  `Instructions: You are an AI assistant providing helpful advice. 
+   You are given the following extracted parts of a long document(may contain tables in delimited text) and a question. 
+   compose a comprehensive reply to the question.
    You can cross-check information with your own search and can provide a better answer. 
-   Make sure the answer is correct and don't output false content. 
-   Ignore outlier search results which has nothing to do with the question. 
-              
+   Make sure the answer is correct and relevant and don't output false content. 
+   Ignore outlier search results which has nothing to do with the question.
+   If the question is not related to the context, politely respond that you are tuned to only answer questions that are related to the context.              
 Question: {question}
 =========
 {context}
@@ -30,7 +32,7 @@ export const makeChain = (
   onTokenStream?: (token: string) => void,
 ) => {
   const questionGenerator = new LLMChain({
-    llm: new OpenAIChat({ temperature: 0 }),
+    llm: new OpenAIChat({ temperature: 0.5 }),
     prompt: CONDENSE_PROMPT,
   });
   const docChain = loadQAChain(
